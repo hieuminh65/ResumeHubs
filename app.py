@@ -76,8 +76,8 @@ def generateBulletPoint():
         keywords.append(keyword2)
     if keyword3:
         keywords.append(keyword3)
-
     bullet_points = generate_bulletpoints(keywords, st.session_state.data["BULLET_POINT"].tolist() if not st.session_state.data.empty else [])
+    st.success(f"There are {st.session_state.num_bullet_points_generated} new bullet points generated successfully! Copy and use them in your resume.")
     df_new = pd.DataFrame(bullet_points, columns=["BULLET_POINT"])
 
     st.session_state.data = pd.concat([df_new, st.session_state.data], ignore_index=True)
@@ -94,4 +94,8 @@ if submit:
     searchBulletPoint()
 
 if generate:
-    generateBulletPoint()
+    if st.session_state.get('previous_search') != (search, keyword2, keyword3):
+        st.session_state.data = pd.DataFrame()
+        st.session_state.previous_search = (search, keyword2, keyword3)
+    with st.spinner("Generating new bullet points..."):
+        generateBulletPoint()
