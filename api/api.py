@@ -1,11 +1,8 @@
 import replicate
 from api.utils import clean_bullet_points
+import streamlit as st
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-replicate_api_key = os.getenv("REPLICATE_API_KEY")
+replicate_api_key = st.secrets['API_KEY']["REPLICATE_API_KEY"]
 client = replicate.Client(api_token=replicate_api_key)
 
 system_prompt = "You're a dataset generator. Your response should be a list of resume bullet points, each separated by a new line character ('\n'). There's no need to add a '-' or a bullet point symbol at the start of each line. Please follow the prompt and generate at least 7 bullet points. Each bullet point should include the keywords and relevant, quantified information, and be single sentence They should be concise, unique, professional, and written in the third person, past tense, and active voice. Use the X-Y-Z formula: 'Accomplished [X] as measured by [Y], by doing [Z]'. The keyword should be bolded in each bullet point. Maintain the same tense throughout. There may be more than one keyword in the prompt. You must not repeat the same bullet point."
